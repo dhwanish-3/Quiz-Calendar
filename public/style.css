@@ -532,6 +532,24 @@ header .current-date{
 .days li.active{
   color: #fff;
 }
+.days li.active2{
+  color: #fff;
+}
+.days li.active3{
+  color: #fff;
+}
+.days li.active4{
+  color: #fff;
+}
+.days li.active5{
+  color: #fff;
+}
+.days li.active6{
+  color: #fff;
+}
+.days li.active7{
+  color: #fff;
+}
 .days li::before{
   position: absolute;
   content: "";
@@ -543,10 +561,28 @@ header .current-date{
   border-radius: 50%;
   transform: translate(-50%, -50%);
 }
-.days li.active::before{
-  background: #9B59B6;
+.days li.active::before{ /*open*/
+  background: red;
 }
-.days li:not(.active):hover::before{
+.days li.active2::before{ /*school*/
+  background: blue;
+}
+.days li.active3::before{ /*college*/
+  background: rgb(81, 255, 81);
+}
+.days li.active4::before{
+  background: linear-gradient(45deg,red,rgb(81, 255, 81),blue);
+}
+.days li.active5::before{
+  background: linear-gradient(45deg,red,blue);
+}
+.days li.active6::before{
+  background: linear-gradient(45deg,red,rgb(81, 255, 81));
+}
+.days li.active7::before{
+  background: linear-gradient(45deg,blue,rgb(81, 255, 81));
+}
+.days li:not(.active):not(.active2):not(.active3)::not(.active4):not(.active5):not(.active6):not(.active7)hover::before{
   background: #f2f2f2;
 }
 .pop-up{
