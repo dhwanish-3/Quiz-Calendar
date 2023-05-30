@@ -1,6 +1,8 @@
 node_modules
 google-api
+
 .env
 .env.*
+
 credentials.json
 backup
