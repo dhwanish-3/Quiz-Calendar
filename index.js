@@ -9,7 +9,7 @@ const publicDirectory = path.join(__dirname,'./public');
 app.use(express.static(publicDirectory));
 
 // to parse url encoded bodies
-
+app.use(express.urlencoded({extended:true}));
 // parse json bodies
 app.use(express.json());
 
@@ -17,20 +17,24 @@ app.set("view engine", "hbs");
 
 app.use(cookie());
 
+//  checking database connection
 db.connect((error)=>{
     if(error)throw error;
     else{console.log("connected");}
 });
 const pages=require("./routes/pages");
 app.use("/", pages.router);
+
 // trying something new above
 const uploadRouter=require("./router");
 app.use(uploadRouter);
 
+
+// for login signin
 app.use("/auth", require("./routes/auth"));
 
 app.listen(PORT,()=>{
-    console.log('server start at'+ PORT);
+    console.log('server start at '+ PORT);
 });
 
 // google login
@@ -69,11 +73,6 @@ app.get('/logout', (req, res) => {
 app.get('/auth/google/failure', (req, res) => {
   res.send('Failed to authenticate..');
 });
-
-
-// for calender
-// const dateController = require("./controllers/events");
-// app.get('/auth/events',dateController.getEvents);
 
 // for uploading a file locally
 // const upload=require('express-fileupload');
