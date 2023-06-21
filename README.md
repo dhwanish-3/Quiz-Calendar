@@ -1,2 +1,2 @@
-# Enquire-Quiz-Calender
+# Quiz-Calender
 Enquire Quiz Calendar with backend using node js
