@@ -19,8 +19,9 @@ app.use(cookie());
 
 //  checking database connection
 db.connect((error) => {
-  if (error) throw error;
-  else {
+  if (error) {
+    console.log("could not connect");
+  } else {
     console.log("connected");
   }
 });
