@@ -1,15 +1,12 @@
-const mysql = require("mysql");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { promisify } = require("util");
 
-const db = require("../routes/db_connection");
+const db = require("../database/connect");
 
 exports.register = (req, res) => {
   console.log(req.body);
-  // const name=req.body.name;
-  // const email=req.body.email;
-  // const password=req.body.password;
+
   const { name, email, password } = req.body;
 
   db.query(
@@ -19,8 +16,6 @@ exports.register = (req, res) => {
       if (error) {
         console.log(error);
       } else if (results.length > 0) {
-        // res.status(200).redirect("/");
-        // alert("Email already exists. Please choose a different email");
         return res.render("index", {
           message: "That email is already in use",
         });
@@ -34,10 +29,6 @@ exports.register = (req, res) => {
         } else {
           console.log(results);
           res.status(200).redirect("/");
-          // alert("Successfully Registered");
-          // return res.status(200).redirect('/',{
-          //     message:'Successfully registered'
-          // });
         }
       });
       console.log("Register happy now..?");
@@ -122,6 +113,7 @@ exports.isLoggedIn = async (req, res, next) => {
     next();
   }
 };
+
 exports.logout = (req, res) => {
   res.cookie("userSave", "logout", {
     expires: new Date(Date.now() + 2 * 1000),
