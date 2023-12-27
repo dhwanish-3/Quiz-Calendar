@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const db = require("./routes/db_connection");
+const db = require("./database/connect");
 const app = express();
 const cookie = require("cookie-parser");
 const PORT = process.env.PORT || 5000;
@@ -17,7 +17,7 @@ app.set("view engine", "ejs");
 
 app.use(cookie());
 
-//  checking database connection
+// checking database connection
 db.connect((error) => {
   if (error) {
     console.log("could not connect");
