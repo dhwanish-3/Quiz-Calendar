@@ -28,10 +28,6 @@ db.connect((error) => {
 const pages = require("./routes/pages");
 app.use("/", pages.router);
 
-// trying something new above
-const uploadRouter = require("./router");
-app.use(uploadRouter);
-
 // for login signin
 app.use("/auth", require("./routes/auth"));
 
@@ -77,23 +73,3 @@ app.get("/logout", (req, res) => {
 app.get("/auth/google/failure", (req, res) => {
   res.send("Failed to authenticate..");
 });
-
-// for uploading a file locally
-// const upload=require('express-fileupload');
-// app.use(upload());
-
-// app.post('/upload',(req,res)=>{
-//   if(req.files){
-//     console.log(req.files);
-//     var file=req.files.image;
-//     var filename=file.name;
-//     console.log(filename);
-//     file.mv('./img/'+filename,function(err){
-//       if(err){
-//         console.log(err);
-//       }else{
-//         res.send("File Uploaded");
-//       }
-//     })
-//   }
-// })
