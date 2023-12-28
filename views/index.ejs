@@ -32,7 +32,7 @@
         <span>ENQUIRE QUIZ CLUB<span>
       </div>
       <div class="menu">
-        // Check if the user is logged in
+        <!-- Check if the user is logged in -->
         <button class="button" onclick="window.location.href = 'auth/logout.php'">LOGOUT</button>
         <button class="button" id="form-open">LOGIN</button>
         <div>
@@ -44,6 +44,7 @@
     <!-- Home -->
     <section class="home">
       <div class="form_container">
+
         <!-- Login From -->
         <div class="form login_form">
           <form action="/auth/login" method="POST">
@@ -160,6 +161,7 @@
             </div>
           </div>
         </div>
+
         <section class="category-buttons">
           <div class="buttons-row">
             <button class="button open">OPEN</button>
@@ -173,9 +175,11 @@
           </div>
         </section>
       </div>
+
       <!-- Ads Section -->
       <section class="advertisement"></section>
   </section>
+
   <section class="fav-events">
     <div class="question">
       <span>HARD TIME SORTING YOUR FAVOURITE </span>
@@ -308,6 +312,7 @@
       </form>
     </div>
   </section>
+
   <section class="pop-up-section"></section>
   <section class="application-form">
     <div class="backdrop"></div>
@@ -319,6 +324,7 @@
         </div>
         <button class="apply-close-button">&times;</button>
       </div>
+      
       <form action="events/event_apply.php" method="POST" enctype="multipart/form-data">
         <div class="super-row">
           <div class="left-side">
@@ -360,6 +366,7 @@
                 <input type="text" placeholder="Enter any extra details/rules for participation" name="rules">
               </div>
             </div>
+
             <div class="radios">
               <span>Category :</span>
               <div class="radio">
@@ -394,7 +401,9 @@
       </form>
     </div>
   </section>
+
   <section class="footer"></section>
+
   <!-- these are for carousel buttons and auto-carousel-->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"

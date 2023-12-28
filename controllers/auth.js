@@ -8,32 +8,33 @@ exports.register = (req, res) => {
   console.log(req.body);
 
   const { name, email, password } = req.body;
+  const verificatonQuery = `SELECT email FROM user_details WHERE email = ${email}`;
+  db.query(verificatonQuery, async (error, results) => {
+    if (error) {
+      return res.render("index", {
+        message: "something went wrong",
+      });
+    } else if (results.length > 0) {
+      return res.render("index", {
+        message: "That email is already in use",
+      });
+    }
+    let hashedPassword = await bcrypt.hash(password, 3);
+    console.log("hashed password = " + hashedPassword);
 
-  db.query(
-    "SELECT email FROM user_details WHERE email = ?",
-    [email],
-    async (error, results) => {
+    const insetQuery = `INSERT INTO user_details(name,email,password) VALUES ('${name}','${email}','${hashedPassword}')`;
+    db.query(insetQuery, (error, results) => {
       if (error) {
-        console.log(error);
-      } else if (results.length > 0) {
         return res.render("index", {
-          message: "That email is already in use",
+          message: "something went wrong",
+        });
+      } else {
+        return res.status(200).render("index", {
+          message: "login success",
         });
       }
-      let hashedPassword = await bcrypt.hash(password, 3);
-      console.log(hashedPassword);
-      let sqlquery = `INSERT INTO user_details(name,email,password) VALUES ('${name}','${email}','${hashedPassword}')`;
-      db.query(sqlquery, (error, results) => {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log(results);
-          res.status(200).redirect("/");
-        }
-      });
-      console.log("Register happy now..?");
-    }
-  );
+    });
+  });
 };
 
 exports.login = async (req, res) => {
@@ -45,40 +46,37 @@ exports.login = async (req, res) => {
         message: "Please Provide an email and password",
       });
     }
-    db.query(
-      "SELECT * FROM user_details WHERE email = ?",
-      [email],
-      async (err, results) => {
-        console.log(results);
-        if (
-          !results ||
-          !(await bcrypt.compare(password, results[0].password))
-        ) {
-          res.status(401).render("index", {
-            message: "Email or Password is incorrect",
-          });
-        } else {
-          const id = results[0].id;
 
-          const token = jwt.sign({ id }, process.env.JWT_SECRET, {
-            expiresIn: process.env.JWT_EXPIRES_IN,
-          });
+    const verificatonQuery = `SELECT email FROM user_details WHERE email = ${email}`;
+    db.query(verificatonQuery, async (err, results) => {
+      if (!results || !(await bcrypt.compare(password, results[0].password))) {
+        return res.status(401).render("index", {
+          message: "Email or Password is incorrect",
+        });
+      } else {
+        const id = results[0].id;
 
-          console.log("the token is " + token);
+        const token = jwt.sign({ id }, process.env.JWT_SECRET, {
+          expiresIn: process.env.JWT_EXPIRES_IN,
+        });
 
-          const cookieOptions = {
-            expires: new Date(
-              Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
-            ),
-            httpOnly: true,
-          };
-          res.cookie("userSave", token, cookieOptions);
-          res.status(200).redirect("/");
-        }
+        console.log("the token is " + token);
+
+        const cookieOptions = {
+          expires: new Date(
+            Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+          ),
+          httpOnly: true,
+        };
+
+        res.cookie("userSave", token, cookieOptions);
+        return res.status(200).redirect("/");
       }
-    );
+    });
   } catch (err) {
-    console.log(err);
+    return res.render("index", {
+      message: "something went wrong",
+    });
   }
 };
 
@@ -93,20 +91,16 @@ exports.isLoggedIn = async (req, res, next) => {
       console.log(decoded);
 
       // 2. Check if the user still exist
-      db.query(
-        "SELECT * FROM users WHERE id = ?",
-        [decoded.id],
-        (err, results) => {
-          console.log(results);
-          if (!results) {
-            return next();
-          }
-          req.user = results[0];
+      const idQuery = `SELECT * FROM users WHERE id = ${decoded.id}`;
+
+      db.query(idQuery, (err, results) => {
+        if (!results) {
           return next();
         }
-      );
+        req.user = results[0];
+        return next();
+      });
     } catch (err) {
-      console.log(err);
       return next();
     }
   } else {
@@ -119,5 +113,7 @@ exports.logout = (req, res) => {
     expires: new Date(Date.now() + 2 * 1000),
     httpOnly: true,
   });
+  req.logout();
+  req.session.destroy();
   res.status(200).redirect("/");
 };
